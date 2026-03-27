@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" th:action="@{/category/search-range}">
+        <h1>lọc theo tổng số sách totalBooks</h1>
+        Số sách từ: <input type="number" name="min"> đến <input type="number" name="max">
+        <button>Lọc</button>
+    </form>
+    <h3 th:if="${message != null}" th:text="${message}" style="color: red;"></h3>
+    <br>
+    <form method="get" action="/category/search">
+        <h1>Find by name</h1>
+        <input type="text" name="name">
+        <button>Search</button>
+    </form>
+    <br>
+    <h1>List of Category</h1>
+    <br>
+    <h3 th:if="${#lists.isEmpty(listCategory)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listCategory)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Avarage loan days</th>
+                <th>Total books</th>
+                <th>Title books</th>
+                <th>Activities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="category: ${listCategory}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.name}"></td>
+                <td th:text="${category.averageLoanDays}"></td>
+                <td th:text="${category.totalBooks}"></td>
+                <td th:text="${#strings.listJoin(category.books.![title], ', ')}"></td>
+                <td>
+                    <a th:href="@{'/category/delete/' + ${category.id}}">Delete</a>
+                    <a th:href="@{'/category/detail/' + ${category.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/category/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

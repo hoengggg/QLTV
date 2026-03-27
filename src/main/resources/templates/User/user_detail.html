@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/user/update" th:object="${User_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Name
+    <input type="text" th:field="*{name}"> <br>
+    Email
+    <input type="text" th:field="*{email}"> <br>
+    Status
+    <input type="text" th:field="*{status}"> <br>
+    Membership level <br>
+    Premium<input type="radio" th:value="true" th:field="*{membershipLevel}">
+    Standard<input type="radio" th:value="false" th:field="*{membershipLevel}">
+    <br>
+    Max loan limit
+    <input type="number" th:field="*{maxLoanLimit}"> <br>
+    Current loan count
+    <input type="number" th:field="*{currentLoanCount}"> <br>
+    Over due count
+    <input type="number" th:field="*{overdueCount}"> <br>
+    Reservation limit
+    <input type="number" th:field="*{reservationLimit}"> <br>
+    Penalty balance
+    <input type="number" th:field="*{penaltyBalance}"> <br>
+    Role
+    <select th:field="*{role}">
+        <option th:each="role: ${listRole}" th:value="${role.id}" th:text="${role.name}"></option>
+    </select>
+    <br>
+    Membership
+    <select th:field="*{membership}">
+        <option th:each="membership: ${listMembership}" th:value="${membership.id}" th:text="${membership.id}"></option>
+    </select>
+    <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

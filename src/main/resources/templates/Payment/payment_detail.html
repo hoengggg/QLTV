@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/payment/update" th:object="${Payment_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Amount
+    <input type="number" th:field="*{amount}"> <br>
+    Payment date
+    <input type="date" th:field="*{paymentDate}"> <br>
+    Method <br>
+    <select th:field="*{method}">
+        <option th:each="method: ${listMethod}" th:value="${method}" th:text="${method}"></option>
+    </select>
+    <br>
+    Recept number
+    <input type="text" th:field="*{receiptNumber}"> <br>
+    Status <br>
+    <select th:field="*{status}">
+        <option th:each="status: ${listStatus}" th:value="${status}" th:text="${status}"></option>
+    </select>
+    <br>
+    Fine <br>
+    <select th:field="*{fine}">
+        <option th:each="fine: ${listFine}" th:value="${fine.id}" th:text="${fine.id}"></option>
+    </select>
+    <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

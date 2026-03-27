@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" th:action="@{/author/search-range}">
+        <h1>Lọc theo số giải thưởng awardsCount</h1>
+        Số giải thưởng từ: <input type="number" name="min"> đến <input type="number" name="max">
+        <button>Lọc</button>
+    </form>
+    <h3 th:if="${message != null}" th:text="${message}" style="color: red;"></h3>
+    <br>
+    <form method="get" action="/author/search">
+        <h1>Find by name author</h1>
+        <input type="text" name="name">
+        <button>Search</button>
+    </form>
+    <br>
+    <hr>
+    <h3 th:if="${#lists.isEmpty(listAuthor)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listAuthor)}">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Active years</td>
+                <td>Awards</td>
+                <td>Activities</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="author: ${listAuthor}">
+                <td th:text="${author.id}"></td>
+                <td th:text="${author.name}"></td>
+                <td th:text="${author.activeYears}"></td>
+                <td th:text="${author.awardsCount}"></td>
+                <td>
+                    <a th:href="@{'/author/delete/' + ${author.id}}">Delete</a>
+                    <a th:href="@{'/author/detail/' + ${author.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/author/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

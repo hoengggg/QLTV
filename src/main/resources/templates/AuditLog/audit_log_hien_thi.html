@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>List of audit_log</h1>
+    <br>
+    <form method="get" action="/auditlog/search">
+        <h1>Find by description</h1>
+        <input type="text" name="description">
+        <button>Search</button>
+    </form>
+    <br>
+    <h1></h1>
+    <h3 th:if="${#lists.isEmpty(listAuditLog)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listAuditLog)}">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Actor type</td>
+                <td>Action</td>
+                <td>Target type</td>
+                <td>Time stamp</td>
+                <td>Description</td>
+                <td>Activities</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="auditlog: ${listAuditLog}">
+                <td th:text="${auditlog.id}"></td>
+                <td th:text="${auditlog.actorType == true ? 'User' : 'System'}"></td>
+                <td th:text="${auditlog.action}"></td>
+                <td th:text="${auditlog.targetType}"></td>
+                <td th:text="${auditlog.autoTimestamp}"></td>
+                <td th:text="${auditlog.description}"></td>
+                <td>
+                    <a th:href="@{'/auditlog/delete/' + ${auditlog.id}}">Delete</a>
+                    <a th:href="@{'/auditlog/detail/' + ${auditlog.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/auditlog/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

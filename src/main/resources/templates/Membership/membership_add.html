@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post" action="/membership/add" th:object="${newMembership}">
+        Start date
+        <input type="date" th:field="*{startDate}"> <br>
+        End date
+        <input type="date" th:field="*{endDate}"> <br>
+        Status <br>
+        Active<input type="radio" th:value="true" th:field="*{status}">
+        Inactive<input type="radio" th:value="false" th:field="*{status}">
+        <br>
+        Max loan books
+        <input type="number" th:field="*{maxLoanBooks}">
+        <br>
+        Max reservation books
+        <input type="number" th:field="*{maxReservationBooks}">
+        <br>
+        <button>Add</button>
+    </form>
+</body>
+</html>

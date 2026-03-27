@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Add Audit_log</h1>
+    <br>
+    <form method="post" action="/auditlog/add" th:object="${newAuditLog}">
+        Action type
+        <br>
+        <div class="form-check">
+            <input type="radio" th:field="*{actorType}" th:value="true" id="actorUser" required>
+            <label for="actorUser">User</label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" th:field="*{actorType}" th:value="false" id="actorSystem" required>
+            <label for="actorSystem">System</label>
+        </div>
+        <br>
+        Action
+        <select th:field="*{action}">
+            <option th:each="act: ${listAction}" th:value="${act}" th:text="${act}"></option>
+        </select>
+        <br>
+        Target Type
+        <select th:field="*{targetType}">
+            <option th:each="targetT: ${listTargerType}" th:value="${targetT}" th:text="${targetT}"></option>
+        </select>
+        <br>
+        Description
+        <input type="text" th:field="*{description}">
+        <br>
+        <button>Add</button>
+    </form>
+</body>
+</html>

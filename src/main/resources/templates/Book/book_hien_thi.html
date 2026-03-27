@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" action="/book/search">
+        <h1>Find by title</h1>
+        <input type="text" name="title">
+        <button>Search</button>
+    </form>
+    <br>
+    <form method="get" action="/book/loc">
+        <h1>lọc theo popularity score</h1>
+        Điểm từ: <input type="number" name="min" step="0.1">
+        đến: <input type="number" name="max" step="0.1">
+        <button type="submit">Lọc độ hot</button>
+    </form>
+    <br>
+    <hr>
+    <h1>List of Book</h1>
+    <br>
+    <h3 th:if="${#lists.isEmpty(listBook)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listBook)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>ISBN</th>
+                <th>Language</th>
+                <th>Edition</th>
+                <th>Total copies</th>
+                <th>Available copies</th>
+                <th>Min loan days</th>
+                <th>Max loan days</th>
+                <th>Popularity score</th>
+                <th>Activites</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book: ${listBook}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.ISBN}"></td>
+                <td th:text="${book.language}"></td>
+                <td th:text="${book.edition}"></td>
+                <td th:text="${book.totalCopies}"></td>
+                <td th:text="${book.availableCopies}"></td>
+                <td th:text="${book.minLoanDays}"></td>
+                <td th:text="${book.maxLoanDays}"></td>
+                <td th:text="${book.popularityScore}"></td>
+                <td th:text="${book.publisher.name}"></td>
+                <td>
+                    <a th:href="@{'/book/delete/' + ${book.id}}">Delete</a>
+                    <a th:href="@{'/book/detail/' + ${book.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/book/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

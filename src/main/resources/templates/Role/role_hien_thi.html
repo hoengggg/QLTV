@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="get" th:action="@{/role/search-range}">
+    <h1>Lọc role có cấp đồ quyền hạn permissionLevel</h1>
+    Cấp độ từ: <input type="number" name="min"> đến <input type="number" name="max">
+    <button>Lọc cấp độ</button>
+</form>
+<h3 th:if="${message != null}" th:text="${message}" style="color: red;"></h3>
+<br>
+<h2>List Role</h2>
+<br>
+<h3 th:if="${#lists.isEmpty(listRole)}" style="color: red;">Danh sách đang bị rỗng, phải thêm dữ liệu vào</h3>
+<table border="1" th:unless="${#lists.isEmpty(listRole)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Level</th>
+        <th>Limit</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${listRole}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.name}"></td>
+        <td th:text="${r.permissionLevel}"></td>
+        <td th:text="${r.maxReservationLimit}"></td>
+        <td>
+            <a th:href="@{'/role/detail/' + ${r.id}}">Detail</a> |
+            <a th:href="@{'/role/delete/' + ${r.id}}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+    <br>
+    <form method="get" action="/role/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/publisher/update" th:object="${Publisher_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Name
+    <input type="text" th:field="*{name}"> <br>
+    Total published books
+    <input type="number" th:field="*{totalPublishedBooks}"> <br>
+    Average loan days
+    <input type="text" th:field="*{averageLoanDays}"> <br>
+    <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,63 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Publisher;
+import com.example.demo.repository.PublisherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class PublisherController {
+    @Autowired
+    private PublisherRepository repoPublisher;
+
+    @GetMapping("/publisher")
+    public String getAll(Model model){
+        model.addAttribute("listPublisher", repoPublisher.findAll());
+        return "Publisher/publisher_hien_thi";
+    }
+
+    @GetMapping("/publisher/delete/{id}")
+    public String delete(@PathVariable("id") Long id){
+        repoPublisher.deleteById(id);
+        return "redirect:/publisher";
+    }
+
+    @GetMapping("/publisher/add")
+    public String addView(Model model){
+        model.addAttribute("newPublisher", new Publisher());
+        return "Publisher/publisher_add";
+    }
+
+    @PostMapping("/publisher/add")
+    public String add(Publisher publisher){
+        repoPublisher.save(publisher);
+        return "redirect:/publisher";
+    }
+
+    @GetMapping("/publisher/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model){
+        model.addAttribute("Publisher_Tim", repoPublisher.findById(id));
+        return "Publisher/publisher_detail";
+    }
+
+    @PostMapping("/publisher/update")
+    public String update(@ModelAttribute("Publisher_Tim") Publisher publisher){
+        repoPublisher.save(publisher);
+        return "redirect:/publisher";
+    }
+
+    @GetMapping("/publisher/search")
+    public String search(@RequestParam("name") String name, Model model){
+        model.addAttribute("listPublisher", repoPublisher.findByNameContaining(name));
+        return "Publisher/publisher_hien_thi";
+    }
+
+    @GetMapping("/publisher/loc")
+    public String filterFine(@RequestParam("min") Double min,
+                             @RequestParam("max") Double max, Model model) {
+        model.addAttribute("listPublisher", repoPublisher.findByAverageLoanDaysBetween(min, max));
+        return "Publisher/publisher_hien_thi";
+    }
+}

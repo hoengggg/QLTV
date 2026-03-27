@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" th:action="@{/membership/search-range}">
+        <h1>Lọc theo ngày bắt đầu startDate</h1>
+        Ngày bắt đầu từ: <input type="date" name="start"> đến <input type="date" name="end">
+        <button>Lọc ngày</button>
+    </form>
+    <br>
+    <h3 th:if="${message != null}" th:text="${message}" style="color: red;"></h3>
+    <h3 th:if="${#lists.isEmpty(listMembership)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listMembership)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Status</th>
+                <th>Max loan books</th>
+                <th>Max reservation books</th>
+                <th>Activities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="member: ${listMembership}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.startDate}"></td>
+                <td th:text="${member.endDate}"></td>
+                <td th:text="${member.status == true ? 'Active' : 'Inactive'}"></td>
+                <td th:text="${member.maxLoanBooks}"></td>
+                <td th:text="${member.maxReservationBooks}"></td>
+                <td>
+                    <a th:href="@{'/membership/delete/' + ${member.id}}">Delete</a>
+                    <a th:href="@{'/membership/detail/' + ${member.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/membership/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/reservation/add" th:object="${newReservation}">
+    Reservation Date: <input type="date" th:field="*{reservationDate}"> <br>
+    Expiry Date: <input type="date" th:field="*{expiryDate}"> <br>
+    Status: <input type="text" th:field="*{status}"> <br>
+    Priority: <input type="number" th:field="*{priority}"> <br>
+
+    User:
+    <select th:field="*{user}">
+        <option th:each="u : ${listUser}" th:value="${u.id}" th:text="${u.name}"></option>
+    </select> <br>
+
+    Book:
+    <select th:field="*{book}">
+        <option th:each="b : ${listBook}" th:value="${b.id}" th:text="${b.title}"></option>
+    </select> <br>
+
+    <br>
+    <button>Add</button>
+</form>
+</body>
+</html>

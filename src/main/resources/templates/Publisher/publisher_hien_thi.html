@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" action="/publisher/loc">
+        <h1>Lọc theo avarageLoanDays</h1>
+        Tiền từ: <input type="number" name="min" step="0.01">
+        đến: <input type="number" name="max" step="0.01">
+        <button type="submit">Lọc</button>
+    </form>
+    <br>
+    <form method="get" action="/publisher/search">
+        <h1>Find by name</h1>
+        <input type="text" name="name">
+        <button>Search</button>
+    </form>
+    <br>
+    <h3 th:if="${#lists.isEmpty(listPublisher)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listPublisher)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Total published books</th>
+                <th>Avarage loan days</th>
+                <th>Activities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="publisher: ${listPublisher}">
+                <td th:text="${publisher.id}"></td>
+                <td th:text="${publisher.name}"></td>
+                <td th:text="${publisher.totalPublishedBooks}"></td>
+                <td th:text="${publisher.averageLoanDays}"></td>
+                <td>
+                    <a th:href="@{'/publisher/delete/' + ${publisher.id}}">Delete</a>
+                    <a th:href="@{'/publisher/detail/' + ${publisher.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/publisher/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

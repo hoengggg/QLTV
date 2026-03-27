@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" th:action="@{/user/search-range}">
+        <h1>Lọc theo số dư tiền phạt penaltyBalance</h1>
+        Tiền phạt từ: <input type="number" name="min" step="0.01"> đến <input type="number" name="max" step="0.01">
+        <button>Lọc</button>
+    </form>
+    <h3 th:if="${message != null}" th:text="${message}" style="color: red;"></h3>
+    <br>
+    <form method="get" action="/user/search">
+        Find by name
+        <input type="text" name="name">
+        <button>Search</button>
+    </form>
+    <h3 th:if="${#lists.isEmpty(listUser)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listUser)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Membership level</th>
+                <th>Max loan limit</th>
+                <th>Current loan count</th>
+                <th>Over due count</th>
+                <th>Reservation limit</th>
+                <th>Penalty balance</th>
+                <th>Role</th>
+                <th>Membership</th>
+                <th>Actitvities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user: ${listUser}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.status}"></td>
+                <td th:text="${user.membershipLevel == true ? 'Standard' : 'Premium'}"></td>
+                <td th:text="${user.maxLoanLimit}"></td>
+                <td th:text="${user.currentLoanCount}"></td>
+                <td th:text="${user.overdueCount}"></td>
+                <td th:text="${user.reservationLimit}"></td>
+                <td th:text="${user.penaltyBalance}"></td>
+                <td th:text="${user.role.name}"></td>
+                <td th:text="${user.membership.id}"></td>
+                <td>
+                    <a th:href="@{'/user/delete/' + ${user.id}}">Delete</a>
+                    <a th:href="@{'/user/detail/' + ${user.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/user/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

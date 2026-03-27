@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Detail Book Information</h1>
+<br>
+<form method="post" action="/book/update" th:object="${Book_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Title
+    <input type="text" th:field="*{title}"> <br>
+    ISBN
+    <input type="text" th:field="*{ISBN}"> <br>
+    Language
+    <input type="text" th:field="*{language}"> <br>
+    Edition
+    <input type="text" th:field="*{edition}"> <br>
+    Total copies
+    <input type="text" th:field="*{totalCopies}"> <br>
+    Available copies
+    <input type="text" th:field="*{availableCopies}"> <br>
+    Min loan days
+    <input type="text" th:field="*{minLoanDays}"> <br>
+    Max loan days
+    <input type="text" th:field="*{maxLoanDays}"> <br>
+    Popularity score
+    <input type="text" th:field="*{popularityScore}"> <br>
+    Publisher
+    <select th:field="*{publisher}">
+        <option th:each="pbls: ${listPublisher}" th:value="${pbls.id}" th:text="${pbls.name}"></option>
+    </select>
+    <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

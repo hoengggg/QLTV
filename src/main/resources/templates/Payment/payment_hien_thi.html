@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="get" action="/payment/loc">
+        <h1>Lọc theo amount</h1>
+        Tiền từ: <input type="number" name="min" step="0.01">
+        đến: <input type="number" name="max" step="0.01">
+        <button type="submit">Lọc</button>
+    </form>
+    <br>
+    <form method="get" action="/payment/search">
+        Find by Mehthod
+        <input type="text" name="method">
+        <button>Search</button>
+    </form>
+    <h3 th:if="${#lists.isEmpty(listPayment)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+    <table border="1" th:unless="${#lists.isEmpty(listPayment)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Payment date</th>
+                <th>Method</th>
+                <th>Recept number</th>
+                <th>Status</th>
+                <th>Activities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="payment: ${listPayment}">
+                <td th:text="${payment.id}"></td>
+                <td th:text="${payment.amount}"></td>
+                <td th:text="${payment.paymentDate}"></td>
+                <td th:text="${payment.method}"></td>
+                <td th:text="${payment.receiptNumber}"></td>
+                <td th:text="${payment.status}"></td>
+                <td th:text="${payment.fine.id}"></td>
+                <td>
+                    <a th:href="@{'/payment/delete/' + ${payment.id}}">Delete</a>
+                    <a th:href="@{'/payment/detail/' + ${payment.id}}">Detail</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="/payment/add">
+        <button>Add</button>
+    </form>
+</body>
+</html>

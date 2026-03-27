@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/role/update" th:object="${Role_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Role Name
+    <input type="text" th:field="*{name}"> <br>
+    Permission Level
+    <input type="number" th:field="*{permissionLevel}"> <br>
+    Max Reservation Limit
+    <input type="number" th:field="*{maxReservationLimit}"> <br>
+    <button>Add</button>
+</form>
+</body>
+</html>

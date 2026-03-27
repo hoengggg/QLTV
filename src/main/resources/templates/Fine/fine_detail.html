@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/fine/update" th:object="${Fine_Tim}">
+    ID
+    <input type="text" th:field="*{id}" readonly> <br>
+    Amount
+    <input type="number" th:field="*{amount}"> <br>
+    Reason <br>
+    Late<input type="radio" th:value="true" th:field="*{reason}">
+    Lost<input type="radio" th:value="false" th:field="*{reason}">
+    <br>
+    Issued date
+    <input type="date" th:field="*{issuedDate}"> <br>
+    Due date
+    <input type="date" th:field="*{dueDate}"> <br>
+    Status <br>
+    Active<input type="radio" th:value="true" th:field="*{status}">
+    Completed<input type="radio" th:value="false" th:field="*{status}">
+    <br>
+    Loan <br>
+    <select th:field="*{loan}">
+        <option th:each="loan: ${listLoan}" th:value="${loan.id}" th:text="${loan.id}"></option>
+    </select>
+    <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

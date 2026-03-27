@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="get" action="/reservation/search">
+    <h1>Find by status</h1>
+    <input type="text" name="status">
+    <button>Search</button>
+</form>
+<br>
+<h3 th:if="${#lists.isEmpty(listReservation)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+<table border="1" th:unless="${#lists.isEmpty(listReservation)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Reservation Date</th>
+        <th>Expiry Date</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>User Name</th>
+        <th>Book Title</th>
+        <th>Activities</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="res: ${listReservation}">
+        <td th:text="${res.id}"></td>
+        <td th:text="${res.reservationDate}"></td>
+        <td th:text="${res.expiryDate}"></td>
+        <td th:text="${res.status}"></td>
+        <td th:text="${res.priority}"></td>
+        <td th:text="${res.user.name}"></td>
+        <td th:text="${res.book.title}"></td>
+        <td>
+            <a th:href="@{'/reservation/delete/' + ${res.id}}">Delete</a>
+            <a th:href="@{'/reservation/detail/' + ${res.id}}">Detail</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<form method="get" action="/reservation/add">
+    <button>Add New</button>
+</form>
+</body>
+</html>

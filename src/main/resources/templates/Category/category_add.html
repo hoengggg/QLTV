@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Add category</h1>
+    <br>
+    <form method="post" action="/category/add" th:object="${newCategory}">
+        Name
+        <input type="text" th:field="*{name}"> <br>
+        Avarage Loan Days
+        <input type="number" th:field="*{averageLoanDays}"> <br>
+        Total books
+        <input type="number" th:field="*{totalBooks}"> <br>
+        Title book
+        <select th:field="*{books}">
+            <option th:each="book: ${listBook}" th:value="${book.id}" th:text="${book.title}"></option>
+        </select>
+        <br>
+        <button>Add</button>
+    </form>
+</body>
+</html>
