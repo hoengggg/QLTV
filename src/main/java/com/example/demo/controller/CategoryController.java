@@ -4,6 +4,8 @@ import com.example.demo.model.Category;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,14 @@ public class CategoryController {
     private BookRepository repoBook;
 
     @GetMapping("/category")
-    private String getAll(Model model){
-        model.addAttribute("listCategory", repoCategory.findAll());
+    private String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        Page<Category> pageData = repoCategory.findAll(PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("name", null);
+        model.addAttribute("listCategory", repoCategory.findAll(PageRequest.of(pageIndex, 10)));
         return "Category/category_hien_thi";
     }
 
@@ -59,8 +67,16 @@ public class CategoryController {
     }
 
     @GetMapping("/category/search")
-    public String search(@RequestParam("name") String name, Model model){
-        model.addAttribute("listCategory", repoCategory.findByNameContaining(name));
+    public String search(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page, Model model){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        String searchKW = (name != null) ? name.trim() : "";
+
+        Page<Category> pageData = repoCategory.findByNameContaining(searchKW, PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listCategory", pageData.getContent());
+        model.addAttribute("name23", searchKW);
         return "Category/category_hien_thi";
     }
 

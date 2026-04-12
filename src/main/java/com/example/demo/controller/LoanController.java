@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Category;
 import com.example.demo.model.Loan;
 import com.example.demo.repository.LoanRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +23,14 @@ public class LoanController {
     private UserRepository repoUser;
 
     @GetMapping("/loan")
-    public String getAll(Model model){
-        model.addAttribute("listLoan", repoLoan.findAll());
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        Page<Loan> pageData = repoLoan.findAll(PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("status", null);
+        model.addAttribute("listLoan", repoLoan.findAll(PageRequest.of(pageIndex, 10)));
         return "Loan/loan_hien_thi";
     }
 
@@ -64,8 +73,17 @@ public class LoanController {
     }
 
     @GetMapping("/loan/search")
-    public String search(@RequestParam("status") String status, Model model){
-        model.addAttribute("listLoan", repoLoan.findByStatusContaining(status));
+    public String search(@RequestParam("status") String status, @RequestParam(defaultValue = "0") int page, Model model){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        String searchKW = (status != null) ? status.trim() : "";
+
+        Page<Loan> pageData = repoLoan.findByStatusContaining(searchKW, PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listLoan", pageData.getContent());
+        model.addAttribute("status23", searchKW);
+
         return "Loan/loan_hien_thi";
     }
 

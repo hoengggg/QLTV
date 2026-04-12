@@ -4,6 +4,8 @@ import com.example.demo.model.Author;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,15 @@ public class AuthorController {
     private BookRepository repoBook;
 
     @GetMapping("/author")
-    public String getAll(Model model){
-        model.addAttribute("listAuthor", repoAuthor.findAll());
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        Page<Author> pageData = repoAuthor.findAll(PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+
+        model.addAttribute("name23", null);
+        model.addAttribute("listAuthor", repoAuthor.findAll(PageRequest.of(pageIndex, 10)));
         return "Author/author_hien_thi";
     }
 
@@ -55,8 +64,16 @@ public class AuthorController {
     }
 
     @GetMapping("/author/search")
-    public String search(@RequestParam("name") String name, Model model){
-        model.addAttribute("listAuthor", repoAuthor.findByNameContaining(name));
+    public String search(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page, Model model){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        String searchKW = (name != null) ? name.trim() : "";
+
+        Page<Author> pageData = repoAuthor.findByNameContaining(searchKW, PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listAuthor", pageData.getContent());
+        model.addAttribute("name23", searchKW);
         return "Author/author_hien_thi";
     }
 

@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.model.AuditLog;
 import com.example.demo.repository.AuditLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +16,18 @@ public class AuditLogController {
     private AuditLogRepository repoAudit;
 
     @GetMapping("/auditlog")
-    public String getAll(Model model){
-        model.addAttribute("listAuditLog", repoAudit.findAll());
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        // Đưa về Index của Spring (trang 1 -> index 0)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // 1. Lấy đối tượng Page
+        Page<AuditLog> pageData = repoAudit.findAll(PageRequest.of(pageIndex, 10));
+
+        // 2. Đẩy cả 2 biến ra giống như hàm search
+        model.addAttribute("pageData", pageData);
+
+        model.addAttribute("description", null); // Quan trọng: set null để phân biệt với search
+        model.addAttribute("listAuditLog", repoAudit.findAll(PageRequest.of(pageIndex, 10)));
         return "AuditLog/audit_log_hien_thi";
     }
 
@@ -57,8 +70,24 @@ public class AuditLogController {
     }
 
     @GetMapping("/auditlog/search")
-    public String search(@RequestParam("description") String description, Model model){
-        model.addAttribute("listAuditLog", repoAudit.findByDescriptionContaining(description));
+    public String search(@RequestParam(value = "description", required = false) String description,
+                         @RequestParam(defaultValue = "0") int page,
+                         Model model){
+
+        // Đưa về Index của Spring (trang 1 -> index 0)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // 1. Xử lý từ khóa: Nếu null hoặc chỉ toàn dấu cách thì đưa về chuỗi rỗng
+        String searchKeyword = (description != null) ? description.trim() : "";
+
+        // 2. Gọi Repository với từ khóa đã xử lý
+        Page<AuditLog> pageData = repoAudit.findByDescriptionContaining(searchKeyword, PageRequest.of(pageIndex, 10));
+
+        // 3. Đẩy dữ liệu ra View
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listAuditLog", pageData.getContent());
+        model.addAttribute("description23", searchKeyword); // Dùng cái này để "nuôi" link phân trang
+
         return "AuditLog/audit_log_hien_thi";
     }
 }

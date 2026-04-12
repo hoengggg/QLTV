@@ -1,6 +1,8 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.AuditLog;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +17,5 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
     @Query("SELECT DISTINCT a.targetType FROM AuditLog a")
     List<String> findDistinctTargetTypeBy();
 
-    List<AuditLog> findByDescriptionContaining(String description);
+    Page<AuditLog> findByDescriptionContaining(String description, Pageable pageable);
 }

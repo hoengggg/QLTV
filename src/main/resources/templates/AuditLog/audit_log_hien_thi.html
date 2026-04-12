@@ -8,12 +8,26 @@
 <body>
     <h1>List of audit_log</h1>
     <br>
-    <form method="get" action="/auditlog/search">
-        <h1>Find by description</h1>
-        <input type="text" name="description">
-        <button>Search</button>
+    <form method="get" th:action="@{/auditlog/search}">
+        <input type="text" name="description" th:value="${description23}" placeholder="Nhập mô tả...">
+        <button type="submit">Search</button>
     </form>
+
     <br>
+
+    <div th:if="${pageData.totalPages > 0}">
+        <a th:if="${pageData.hasPrevious()}"
+           th:href="@{${description23 != null ? '/auditlog/search' : '/auditlog'}(page=${pageData.number}, description=${description23})}">
+            Previous
+        </a>
+
+        <span> Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]] </span>
+
+        <a th:if="${pageData.hasNext()}"
+           th:href="@{${description23 != null ? '/auditlog/search' : '/auditlog'}(page=${pageData.number + 2}, description=${description23})}">
+            Next
+        </a>
+    </div>
     <h1></h1>
     <h3 th:if="${#lists.isEmpty(listAuditLog)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
     <table border="1" th:unless="${#lists.isEmpty(listAuditLog)}">

@@ -5,6 +5,8 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,14 @@ public class ReservationController {
     private BookRepository repoBook; // Để lấy danh sách Book cho combobox
 
     @GetMapping("/reservation")
-    public String getAll(Model model){
-        model.addAttribute("listReservation", repoReservation.findAll());
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        Page<Reservation> pageData = repoReservation.findAll(PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("status", null);
+        model.addAttribute("listReservation", repoReservation.findAll(PageRequest.of(pageIndex, 10)));
         return "Reservation/reservation_hien_thi";
     }
 
@@ -61,8 +69,16 @@ public class ReservationController {
     }
 
     @GetMapping("/reservation/search")
-    public String search(@RequestParam("status") String status, Model model){
-        model.addAttribute("listReservation", repoReservation.findByStatusContaining(status));
+    public String search(@RequestParam("status") String status, @RequestParam(defaultValue = "0") int page, Model model){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        String searchKW = (status != null) ? status.trim() : "";
+
+        Page<Reservation> pageData = repoReservation.findByStatusContaining(searchKW, PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listReservation", pageData.getContent());
+        model.addAttribute("status23", searchKW);
         return "Reservation/reservation_hien_thi";
     }
 }

@@ -4,6 +4,8 @@ import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,15 @@ public class BookController {
     private PublisherRepository repoPublisher;
 
     @GetMapping("/book")
-    public String getAll(Model model){
-        model.addAttribute("listBook", repoBook.findAll());
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        Page<Book> pageData = repoBook.findAll(PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+
+        model.addAttribute("title", null);
+        model.addAttribute("listBook", repoBook.findAll(PageRequest.of(pageIndex, 10)));
         return "Book/book_hien_thi";
     }
 
@@ -57,8 +66,16 @@ public class BookController {
     }
 
     @GetMapping("/book/search")
-    public String search(@RequestParam("title") String title, Model model){
-        model.addAttribute("listBook", repoBook.findByTitleContaining(title));
+    public String search(@RequestParam("title") String title, @RequestParam(defaultValue = "0") int page, Model model){
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        String searchKW = (title != null) ? title.trim() : "";
+
+        Page<Book> pageData = repoBook.findByTitleContaining(searchKW, PageRequest.of(pageIndex, 10));
+
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listBook", pageData.getContent());
+        model.addAttribute("title23", searchKW);
         return "Book/book_hien_thi";
     }
 

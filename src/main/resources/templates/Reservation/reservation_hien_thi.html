@@ -9,11 +9,29 @@
 
 <form method="get" action="/reservation/search">
     <h1>Find by status</h1>
-    <input type="text" name="status">
+    <input type="text" name="status" th:value="${status23}">
     <button>Search</button>
 </form>
 <br>
 <h3 th:if="${#lists.isEmpty(listReservation)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
+<br>
+
+<div th:if="${pageData.totalPages > 0}">
+    <a th:if="${pageData.hasPrevious()}"
+       th:href="@{${status23 != null ? '/reservation/search' : '/reservation'}(page=${pageData.number}, status=${status23})}">
+        Previous
+    </a>
+
+    <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
+
+    <a th:if="${pageData.hasNext()}"
+       th:href="@{${status23 != null ? '/reservation/search' : '/reservation'}(page=${pageData.number + 2}, status=${status23})}">
+        Next
+    </a>
+
+</div>
+
+<br>
 <table border="1" th:unless="${#lists.isEmpty(listReservation)}">
     <thead>
     <tr>

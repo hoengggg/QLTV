@@ -15,9 +15,26 @@
     <br>
     <form method="get" action="/category/search">
         <h1>Find by name</h1>
-        <input type="text" name="name">
+        <input type="text" name="name" th:value="${name23}">
         <button>Search</button>
     </form>
+    <br>
+
+    <div th:if="${pageData.totalPages > 0}">
+        <a th:if="${pageData.hasPrevious()}"
+           th:href="@{${name23 != null ? '/category/search' : '/category'}(page=${pageData.number}, name=${name23})}">
+            Previous
+        </a>
+
+        <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
+
+        <a th:if="${pageData.hasNext()}"
+           th:href="@{${name23 != null ? '/category/search' : '/category'}(page=${pageData.number + 2}, name=${name23})}">
+            Next
+        </a>
+
+    </div>
+
     <br>
     <h1>List of Category</h1>
     <br>

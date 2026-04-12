@@ -15,9 +15,27 @@
     <br>
     <form method="get" action="/payment/search">
         Find by Mehthod
-        <input type="text" name="method">
+        <input type="text" name="method" th:value="${method23}">
         <button>Search</button>
     </form>
+    <br>
+
+    <div th:if="${pageData.totalPages > 0}">
+        <a th:if="${pageData.hasPrevious()}"
+           th:href="@{${method23 != null ? '/payment/search' : '/payment'}(page=${pageData.number}, method=${method23})}">
+            Previous
+        </a>
+
+        <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
+
+        <a th:if="${pageData.hasNext()}"
+           th:href="@{${method23 != null ? '/payment/search' : '/payment'}(page=${pageData.number + 2}, method=${method23})}">
+            Next
+        </a>
+
+    </div>
+
+    <br>
     <h3 th:if="${#lists.isEmpty(listPayment)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu vào</h3>
     <table border="1" th:unless="${#lists.isEmpty(listPayment)}">
         <thead>

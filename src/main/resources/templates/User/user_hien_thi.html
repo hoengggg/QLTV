@@ -15,10 +15,28 @@
     <br>
     <form method="get" action="/user/search">
         Find by name
-        <input type="text" name="name">
+        <input type="text" name="name" th:value="${name23}">
         <button>Search</button>
     </form>
     <h3 th:if="${#lists.isEmpty(listUser)}" style="color: red;">Danh sách bị rỗng, phải thêm dữ liệu</h3>
+    <br>
+
+    <div th:if="${pageData.totalPages > 0}">
+        <a th:if="${pageData.hasPrevious()}"
+           th:href="@{${name23 != null ? '/user/search' : '/user'}(page=${pageData.number}, name=${name23})}">
+            Previous
+        </a>
+
+        <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
+
+        <a th:if="${pageData.hasNext()}"
+           th:href="@{${name23 != null ? '/user/search' : '/user'}(page=${pageData.number + 2}, name=${name23})}">
+            Next
+        </a>
+
+    </div>
+
+    <br>
     <table border="1" th:unless="${#lists.isEmpty(listUser)}">
         <thead>
             <tr>
