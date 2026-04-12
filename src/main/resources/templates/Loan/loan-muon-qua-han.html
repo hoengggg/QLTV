@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Tên người dùng</th>
+            <th>Tên sách</th>
+            <th>Số ngày trễ</th>
+        </thead>
+
+        <tbody>
+            <tr th:each="lm: ${loan}">
+                <td th:text="${lm.tenNguoiDung}"></td>
+                <td th:text="${lm.tenSach}"></td>
+                <td th:text="${lm.soNgayTre}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

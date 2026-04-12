@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Tên người dùng</th>
+            <th>Lý do cấm mượn</th>
+        </thead>
+
+        <tbody>
+            <tr th:each="bu: ${listBlock}">
+                <td th:text="${bu.tenNguoiDung}"></td>
+                <td th:text="${bu.lyDo}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

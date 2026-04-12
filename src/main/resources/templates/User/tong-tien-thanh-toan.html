@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Tên khách hàng</th>
+            <th>Tổng tiền thanh toán</th>
+        </thead>
+
+        <tbody>
+            <tr th:each="tt: ${list_thanh_toan}">
+                <th th:text="${tt.tenKhachHang}"></th>
+                <th th:text="${tt.tongTienThanhToan}"></th>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
