@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Mã biên lai</th>
+            <th>Tên người dùng</th>
+            <th>Số tiền</th>
+            <th>Ngày nộp</th>
+            <th>Phương thức</th>
+        </thead>
+
+        <tbody>
+            <tr th:each="dt: ${listDoanhThu}">
+                <td th:text="${dt.maBienLai}"></td>
+                <td th:text="${dt.tenDocGia}"></td>
+                <td th:text="${dt.soTien}"></td>
+                <td th:text="${dt.ngayNop}"></td>
+                <td th:text="${dt.phuongThuc}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -9,6 +9,14 @@
 <form method="post" action="/loan/update" th:object="${Loan_Tim}">
     ID
     <input type="text" th:field="*{id}" readonly> <br>
+    Book:
+    <select name="bookId">
+        <option th:each="b : ${listBook}"
+                th:value="${b.id}"
+                th:text="${b.title}"
+                th:selected="${currentBookId != null && b.id == currentBookId}">
+        </option>
+    </select> <br>
     Loan date
     <input type="date" th:field="*{loanDate}"> <br>
     Due date

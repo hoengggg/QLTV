@@ -11,5 +11,6 @@ import java.util.List;
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
     Page<Publisher> findByNameContaining(String name, Pageable pageable);
 
-    List<Publisher> findByAverageLoanDaysBetween(Double min, Double max);
+    // Thay đổi từ List sang Page
+    Page<Publisher> findByAverageLoanDaysBetween(Double min, Double max, Pageable pageable);
 }

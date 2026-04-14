@@ -13,7 +13,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
     @Query(value = """
         SELECT u.name AS TenNguoiDung, m.endDate AS NgayHetHan FROM [User] u 
-        JOIN Membership m ON u.membership_id = m.id WHERE m.status = 1
+        JOIN Membership m ON u.membership_id = m.id WHERE m.status = 1 AND m.endDate > GETDATE()
     """, nativeQuery = true)
     List<MemberShipActiveDto> getAllMember();
 }

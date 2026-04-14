@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Payment;
+import com.example.demo.model.User;
 import com.example.demo.repository.FineRepository;
 import com.example.demo.repository.PaymentRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,17 @@ public class PaymentController {
     private FineRepository repoFine;
 
     @GetMapping("/payment")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName) && !"Librarian".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<Payment> pageData = repoPayment.findAll(PageRequest.of(pageIndex, 10));
@@ -88,9 +100,30 @@ public class PaymentController {
     }
 
     @GetMapping("/payment/loc")
-    public String filterFine(@RequestParam("min") Double min,
-                             @RequestParam("max") Double max, Model model) {
-        model.addAttribute("listPayment", repoPayment.findByAmountBetween(min, max));
+    public String filterPayment(
+            @RequestParam("min") Double min,
+            @RequestParam("max") Double max,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        // Chuyển đổi trang UI (1, 2...) sang index code (0, 1...)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // Thực hiện truy vấn có phân trang
+        Page<Payment> pageData = repoPayment.findByAmountBetween(min, max, PageRequest.of(pageIndex, 10));
+
+        // Đưa dữ liệu sang HTML
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listPayment", pageData.getContent());
+
+        // Lưu lại min/max để các nút chuyển trang giữ được điều kiện lọc
+        model.addAttribute("minSearch", min);
+        model.addAttribute("maxSearch", max);
+
+        if (pageData.isEmpty()) {
+            model.addAttribute("message", "Không tìm thấy giao dịch thanh toán nào trong khoảng này!");
+        }
+
         return "Payment/payment_hien_thi";
     }
 }

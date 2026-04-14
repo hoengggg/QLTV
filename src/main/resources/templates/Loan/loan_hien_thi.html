@@ -42,6 +42,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <td>Book</td>
                 <th>Loan date</th>
                 <th>Due date</th>
                 <th>Return date</th>
@@ -57,6 +58,10 @@
         <tbody>
             <tr th:each="loan: ${listLoan}">
                 <td th:text="${loan.id}"></td>
+<!--                cứ tìm đến model loan vs loan_detail là sẽ đại khái hiểu-->
+                <td>
+                    <span th:each="detail : ${loan.loan_details}" th:text="${detail.book.title}"></span>
+                </td>
                 <td th:text="${loan.loanDate}"></td>
                 <td th:text="${loan.dueDate}"></td>
                 <td th:text="${loan.returnDate}"></td>
@@ -76,6 +81,10 @@
     <br>
     <form method="get" action="/loan/add">
         <button>Add</button>
+    </form>
+
+    <form method="get" action="logout">
+        <button>Đăng xuất</button>
     </form>
 </body>
 </html>

@@ -51,4 +51,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "membership_id", referencedColumnName = "id")
     private Membership membership;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "username")
+    private String username;
 }

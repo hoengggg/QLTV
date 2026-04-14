@@ -48,6 +48,7 @@
                 <th>Language</th>
                 <th>Edition</th>
                 <th>Total copies</th>
+                <th>Status</th>
                 <th>Available copies</th>
                 <th>Min loan days</th>
                 <th>Max loan days</th>
@@ -63,6 +64,9 @@
                 <td th:text="${book.language}"></td>
                 <td th:text="${book.edition}"></td>
                 <td th:text="${book.totalCopies}"></td>
+                <td>
+                    <span th:text="${book.totalCopies >= 1 ? 'In stock' : 'Out stock'}"></span>
+                </td>
                 <td th:text="${book.availableCopies}"></td>
                 <td th:text="${book.minLoanDays}"></td>
                 <td th:text="${book.maxLoanDays}"></td>
@@ -78,6 +82,10 @@
     <br>
     <form method="get" action="/book/add">
         <button>Add</button>
+    </form>
+
+    <form method="get" action="logout">
+        <button>Đăng xuất</button>
     </form>
 </body>
 </html>

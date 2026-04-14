@@ -7,6 +7,10 @@
 </head>
 <body>
     <form method="post" action="/loan/add" th:object="${newLoan}">
+        Book
+        <select name="bookId">
+            <option th:each="b: ${listBook}" th:value="${b.id}" th:text="${b.title}"></option>
+        </select> <br>
         Loan date
         <input type="date" th:field="*{loanDate}"> <br>
         Due date

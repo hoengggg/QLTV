@@ -4,6 +4,11 @@ go
 use QLTV
 go
 
+use master
+go
+
+drop database QLTV
+go
 
 create table Role(
 	id bigint identity(1,1) primary key,
@@ -32,9 +37,10 @@ create table [User](
 	overdueCount int,
 	reservationLimit int,
 	penaltyBalance decimal(10,2),
-
 	role_id bigint,
 	membership_id bigint,
+	username NVARCHAR(50),
+    password NVARCHAR(50),
 	-- Xoa Role hoac Membership thi User lien quan se bi xoa theo (Cascade)
     CONSTRAINT FK_User_Role FOREIGN KEY (role_id) REFERENCES Role(id) ON DELETE CASCADE,
     CONSTRAINT FK_User_Membership FOREIGN KEY (membership_id) REFERENCES Membership(id) ON DELETE CASCADE
@@ -258,22 +264,22 @@ INSERT INTO AuditLog(actorType, action, targetType, description) VALUES
 
 --sua lai status cua user tu nvarchar thanh bit
 -- 2. B?ng ph? thu?c c?p 1 (Con c?a các b?ng trên)
-INSERT INTO [User](name, email, status, membershipLevel, maxLoanLimit, currentLoanCount, overdueCount, reservationLimit, penaltyBalance, role_id, membership_id) VALUES 
-('Nguyen Van A', 'a@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 1, 1),
-('Tran Thi B', 'b@gmail.com', 'Active', 1, 5, 1, 0, 3, 0, 2, 2),
-('Le Van C', 'c@gmail.com', 'Active', 1, 10, 2, 1, 5, 10, 3, 3),
-('Pham Minh D', 'd@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 4, 4),
-('Hoang Lan E', 'e@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 5, 5),
-('Do Hung F', 'f@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 6, 6),
-('Bui Bich G', 'g@gmail.com', 'Active', 1, 10, 0, 0, 5, 0, 7, 7),
-('Dang Van H', 'h@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 8, 8),
-('Ngo Kien I', 'i@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 9, 9),
-('Vu Lan J', 'j@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 10, 10),
-('Ly Thanh K', 'k@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 11, 11),
-('Trinh Van L', 'l@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 12, 12),
-('Mai Hong M', 'm@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 13, 13),
-('Dao Duc N', 'n@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 14, 14),
-('Phan Kim O', 'o@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 15, 15);
+INSERT INTO [User](name, email, status, membershipLevel, maxLoanLimit, currentLoanCount, overdueCount, reservationLimit, penaltyBalance, role_id, membership_id, username, password) VALUES 
+(N'Nguyen Van A', 'a@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 1, 1, 'user_a', '123'),
+(N'Tran Thi B', 'b@gmail.com', 'Active', 1, 5, 1, 0, 3, 0, 2, 2, 'user_b', '123'),
+(N'Le Van C', 'c@gmail.com', 'Active', 1, 10, 2, 1, 5, 10, 3, 3, 'user_c', '123'),
+(N'Pham Minh D', 'd@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 4, 4, 'user_d', '123'),
+(N'Hoang Lan E', 'e@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 5, 5, 'user_e', '123'),
+(N'Do Hung F', 'f@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 6, 6, 'user_f', '123'),
+(N'Bui Bich G', 'g@gmail.com', 'Active', 1, 10, 0, 0, 5, 0, 7, 7, 'user_g', '123'),
+(N'Dang Van H', 'h@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 8, 8, 'user_h', '123'),
+(N'Ngo Kien I', 'i@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 9, 9, 'user_i', '123'),
+(N'Vu Lan J', 'j@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 10, 10, 'user_j', '123'),
+(N'Ly Thanh K', 'k@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 11, 11, 'user_k', '123'),
+(N'Trinh Van L', 'l@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 12, 12, 'user_l', '123'),
+(N'Mai Hong M', 'm@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 13, 13, 'user_m', '123'),
+(N'Dao Duc N', 'n@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 14, 14, 'user_n', '123'),
+(N'Phan Kim O', 'o@gmail.com', 'Active', 1, 5, 0, 0, 3, 0, 15, 15, 'user_o', '123');
 
 INSERT INTO Book(title,ISBN,language,edition,totalCopies,availableCopies,minLoanDays,maxLoanDays,popularityScore,publisher_id) VALUES
 ('Java','111','EN','1',10,5,1,7,4.5,1),
@@ -308,6 +314,7 @@ INSERT INTO Loan(loanDate,dueDate,returnDate,status,totalBooks,overdueDays,fineA
 ('2026-01-12','2026-01-21',NULL,'active',1,0,0,0,12),
 ('2026-01-13','2026-01-22',NULL,'active',2,0,0,0,13),
 ('2026-01-14','2026-01-23',NULL,'active',1,0,0,0,14),
+('2026-01-15','2026-01-24',NULL,'active',2,0,0,0,15),
 ('2026-01-15','2026-01-24',NULL,'active',2,0,0,0,15);
 
 INSERT INTO Reservation(reservationDate, expiryDate, status, priority, user_id, book_id) VALUES
@@ -326,7 +333,7 @@ INSERT INTO Reservation(reservationDate, expiryDate, status, priority, user_id, 
 INSERT INTO Loan_Detail(loan_id,book_id,quantity) VALUES
 (1,1,1),(1,2,1),(2,3,1),(3,4,1),(4,5,1),
 (5,6,1),(6,7,1),(7,8,1),(8,9,1),(9,10,1),
-(10,11,1),(11,12,1),(12,13,1),(13,14,1),(14,15,1);
+(10,11,1),(11,12,1),(12,13,1),(13,14,1),(14,15,1),(15,15,9);
 
 INSERT INTO Fine(amount, reason, issuedDate, dueDate, status, loan_id) VALUES
 (10.0, 0, '2026-02-01', '2026-02-15', 1, 1), (20.0, 0, '2026-02-02', '2026-02-16', 1, 2),

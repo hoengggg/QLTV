@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Reservation;
+import com.example.demo.model.User;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +25,17 @@ public class ReservationController {
     private BookRepository repoBook; // Để lấy danh sách Book cho combobox
 
     @GetMapping("/reservation")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName) && !"Librarian".equalsIgnoreCase(roleName) && !"Student".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<Reservation> pageData = repoReservation.findAll(PageRequest.of(pageIndex, 10));

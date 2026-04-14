@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Publisher;
+import com.example.demo.model.User;
 import com.example.demo.repository.PublisherRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +17,17 @@ public class PublisherController {
     private PublisherRepository repoPublisher;
 
     @GetMapping("/publisher")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<Publisher> pageData = repoPublisher.findAll(PageRequest.of(pageIndex, 10));
@@ -71,9 +83,30 @@ public class PublisherController {
     }
 
     @GetMapping("/publisher/loc")
-    public String filterFine(@RequestParam("min") Double min,
-                             @RequestParam("max") Double max, Model model) {
-        model.addAttribute("listPublisher", repoPublisher.findByAverageLoanDaysBetween(min, max));
+    public String filterPublisher(
+            @RequestParam("min") Double min,
+            @RequestParam("max") Double max,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        // Tính toán index trang (Trang 1 ở UI = index 0 ở DB)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // Gọi repo với phân trang (mỗi trang hiển thị 10 nhà xuất bản)
+        Page<Publisher> pageData = repoPublisher.findByAverageLoanDaysBetween(min, max, PageRequest.of(pageIndex, 10));
+
+        // Đưa dữ liệu sang HTML để fix lỗi "totalPages cannot be found on null"
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listPublisher", pageData.getContent());
+
+        // Gửi lại min/max để các nút Previous/Next giữ được điều kiện lọc
+        model.addAttribute("minSearch", min);
+        model.addAttribute("maxSearch", max);
+
+        if (pageData.isEmpty()) {
+            model.addAttribute("message", "Không tìm thấy nhà xuất bản nào trong khoảng này!");
+        }
+
         return "Publisher/publisher_hien_thi";
     }
 }

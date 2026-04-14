@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.AuditLog;
+import com.example.demo.model.User;
 import com.example.demo.repository.AuditLogRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,18 @@ public class AuditLogController {
     private AuditLogRepository repoAudit;
 
     @GetMapping("/auditlog")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName) && !"Librarian".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
+
         // Đưa về Index của Spring (trang 1 -> index 0)
         int pageIndex = (page < 1) ? 0 : page - 1;
 

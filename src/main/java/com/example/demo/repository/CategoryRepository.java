@@ -10,5 +10,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Page<Category> findByNameContaining(String name, Pageable pageable);
 
-    List<Category> findByTotalBooksBetween(Integer min, Integer max);
+    // Trong CategoryRepository.java
+    Page<Category> findByTotalBooksBetween(Integer min, Integer max, Pageable pageable);
 }

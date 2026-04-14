@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.MembershipRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,17 @@ public class UserController {
     private MembershipRepository repoMembership;
 
     @GetMapping("/user")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<User> pageData = repoUser.findAll(PageRequest.of(pageIndex, 10));
@@ -87,10 +98,24 @@ public class UserController {
     }
 
     @GetMapping("/user/search-range")
-    public String searchRange(@RequestParam("min") Double min, @RequestParam("max") Double max, Model model) {
+    public String searchRange(@RequestParam("min") Double min,
+                              @RequestParam("max") Double max,
+                              Model model) {
+        // 1. Lấy danh sách từ Repo
         List<User> list = repoUser.findByPenaltyBalanceBetween(min, max);
+
+        // 2. Tạo một Page "giả" để Thymeleaf không bị lỗi null totalPages
+        // Bạn dùng PageImpl để bọc cái list lại
+        org.springframework.data.domain.Page<User> pageData =
+                new org.springframework.data.domain.PageImpl<>(list);
+
+        // 3. Đẩy CẢ HAI vào model
+        model.addAttribute("pageData", pageData); // Dòng này giúp hết lỗi 500
         model.addAttribute("listUser", list);
-        if (list.isEmpty()) model.addAttribute("message", "Không tìm thấy người dùng nào trong khoảng phạt này!");
+
+        if (list.isEmpty()) {
+            model.addAttribute("message", "Không tìm thấy người dùng nào!");
+        }
         return "User/user_hien_thi";
     }
 }

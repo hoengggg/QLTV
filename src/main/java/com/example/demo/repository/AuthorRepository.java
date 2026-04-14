@@ -10,5 +10,6 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     Page<Author> findByNameContaining(String name, Pageable pageable);
 
-    List<Author> findByAwardsCountBetween(Integer min, Integer max);
+    // Trong AuthorRepository.java
+    Page<Author> findByAwardsCountBetween(Integer min, Integer max, Pageable pageable);
 }

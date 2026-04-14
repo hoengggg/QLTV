@@ -9,19 +9,17 @@
     <table border="1">
         <thead>
             <th>Tên người dùng</th>
-            <th>Lý do cấm mượn</th>
+            <th>Trạng thái</th>
+            <th>Số sách mượn</th>
         </thead>
 
         <tbody>
-            <tr th:each="bu: ${listBlock}">
-                <td th:text="${bu.tenNguoiDung}"></td>
-                <td th:text="${bu.lyDo}"></td>
+            <tr th:each="tk: ${listThongKe}">
+                <td th:text="${tk.tenNguoiDung}"></td>
+                <td th:text="${tk.status}"></td>
+                <td th:text="${tk.sachMuon}"></td>
             </tr>
         </tbody>
     </table>
-
-    <form method="get" action="logout">
-        <button>Đăng xuất</button>
-    </form>
 </body>
 </html>

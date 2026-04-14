@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>STT</th>
+            <th>Tên người mượn</th>
+            <th>Tên sách</th>
+            <th>Hạn trả</th>
+        </thead>
+
+        <tbody>
+            <tr th:each="sqh, state: ${sachQuaHan}">
+                <td th:text="${state.count}"></td>
+                <td th:text="${sqh.tenNguoiMuon}"></td>
+                <td th:text="${sqh.tenSach}"></td>
+                <td th:text="${sqh.ngayTra}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

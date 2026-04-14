@@ -14,7 +14,11 @@
     Email
     <input type="text" th:field="*{email}"> <br>
     Status
-    <input type="text" th:field="*{status}"> <br>
+    <select th:field="*{status}">
+        <option value="Active">Active</option>
+        <option value="Unactive">Unactive</option>
+    </select>
+    <br>
     Membership level <br>
     Premium<input type="radio" th:value="true" th:field="*{membershipLevel}">
     Standard<input type="radio" th:value="false" th:field="*{membershipLevel}">
@@ -38,7 +42,10 @@
     <select th:field="*{membership}">
         <option th:each="membership: ${listMembership}" th:value="${membership.id}" th:text="${membership.id}"></option>
     </select>
-    <br>
+    Password
+    <input type="text" th:field="*{password}"> <br>
+    Username
+    <input type="text" th:field="*{username}"> <br>
     <button>Update</button>
 </form>
 </body>

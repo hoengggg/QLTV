@@ -24,17 +24,16 @@
 
     <div th:if="${pageData.totalPages > 0}">
         <a th:if="${pageData.hasPrevious()}"
-           th:href="@{${name23 != null ? '/publisher/search' : '/publisher'}(page=${pageData.number}, name=${name23})}">
+           th:href="@{${name23 != null ? '/publisher/search' : (minSearch != null ? '/publisher/loc' : '/publisher')}(page=${pageData.number}, name=${name23}, min=${minSearch}, max=${maxSearch})}">
             Previous
         </a>
 
         <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
 
         <a th:if="${pageData.hasNext()}"
-           th:href="@{${name23 != null ? '/publisher/search' : '/publisher'}(page=${pageData.number + 2}, name=${mname23ethod23})}">
+           th:href="@{${name23 != null ? '/publisher/search' : (minSearch != null ? '/publisher/loc' : '/publisher')}(page=${pageData.number + 2}, name=${name23}, min=${minSearch}, max=${maxSearch})}">
             Next
         </a>
-
     </div>
 
     <br>
@@ -64,6 +63,10 @@
     <br>
     <form method="get" action="/publisher/add">
         <button>Add</button>
+    </form>
+
+    <form method="get" action="logout">
+        <button>Đăng xuất</button>
     </form>
 </body>
 </html>

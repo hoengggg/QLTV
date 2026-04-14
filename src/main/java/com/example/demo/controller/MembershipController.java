@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Membership;
+import com.example.demo.model.User;
 import com.example.demo.repository.MembershipRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,17 @@ public class MembershipController {
     private MembershipRepository repoMember;
 
     @GetMapping("/membership")
-    public String getAll(Model model){
+    public String getAll(Model model, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName) && !"Librarian".equalsIgnoreCase(roleName) && !"Student".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         model.addAttribute("listMembership", repoMember.findAll());
         return "Membership/membership_hien_thi";
     }

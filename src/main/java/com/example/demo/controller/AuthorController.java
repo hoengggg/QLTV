@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Author;
+import com.example.demo.model.User;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +23,17 @@ public class AuthorController {
     private BookRepository repoBook;
 
     @GetMapping("/author")
-    public String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    public String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<Author> pageData = repoAuthor.findAll(PageRequest.of(pageIndex, 10));
@@ -78,10 +90,30 @@ public class AuthorController {
     }
 
     @GetMapping("/author/search-range")
-    public String searchRange(@RequestParam("min") Integer min, @RequestParam("max") Integer max, Model model) {
-        List<Author> list = repoAuthor.findByAwardsCountBetween(min, max);
-        model.addAttribute("listAuthor", list);
-        if (list.isEmpty()) model.addAttribute("message", "Không tìm thấy tác giả nào đạt số giải thưởng này!");
+    public String searchRange(
+            @RequestParam("min") Integer min,
+            @RequestParam("max") Integer max,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        // Xử lý index trang (Trang 1 ở UI = trang 0 ở DB)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // Gọi repo với phân trang (ví dụ 10 bản ghi/trang)
+        Page<Author> pageData = repoAuthor.findByAwardsCountBetween(min, max, PageRequest.of(pageIndex, 10));
+
+        // Đưa dữ liệu sang HTML - Đây là bước quan trọng để không bị lỗi null
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listAuthor", pageData.getContent());
+
+        // Gửi lại min/max để giữ trạng thái lọc khi bấm Next/Previous
+        model.addAttribute("minSearch", min);
+        model.addAttribute("maxSearch", max);
+
+        if (pageData.isEmpty()) {
+            model.addAttribute("message", "Không tìm thấy tác giả nào!");
+        }
+
         return "Author/author_hien_thi";
     }
 }

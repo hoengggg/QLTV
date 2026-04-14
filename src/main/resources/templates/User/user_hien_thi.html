@@ -52,6 +52,8 @@
                 <th>Penalty balance</th>
                 <th>Role</th>
                 <th>Membership</th>
+                <th>Password</th>
+                <th>Username</th>
                 <th>Actitvities</th>
             </tr>
         </thead>
@@ -69,6 +71,8 @@
                 <td th:text="${user.penaltyBalance}"></td>
                 <td th:text="${user.role.name}"></td>
                 <td th:text="${user.membership.id}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.username}"></td>
                 <td>
                     <a th:href="@{'/user/delete/' + ${user.id}}">Delete</a>
                     <a th:href="@{'/user/detail/' + ${user.id}}">Detail</a>
@@ -79,6 +83,10 @@
     <br>
     <form method="get" action="/user/add">
         <button>Add</button>
+    </form>
+
+    <form method="get" action="logout">
+        <button>Đăng xuất</button>
     </form>
 </body>
 </html>

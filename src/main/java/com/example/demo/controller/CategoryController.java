@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Category;
+import com.example.demo.model.User;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.CategoryRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +23,17 @@ public class CategoryController {
     private BookRepository repoBook;
 
     @GetMapping("/category")
-    private String getAll(Model model, @RequestParam(defaultValue = "0") int page){
+    private String getAll(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session){
+        User currentUser = (User) session.getAttribute("currentUser");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+        String roleName = currentUser.getRole().getName();
+        if(!"Admin".equalsIgnoreCase(roleName) && !"Librarian".equalsIgnoreCase(roleName)){
+            return "Login/403";
+        }
+
         int pageIndex = (page < 1) ? 0 : page - 1;
 
         Page<Category> pageData = repoCategory.findAll(PageRequest.of(pageIndex, 10));
@@ -81,10 +93,30 @@ public class CategoryController {
     }
 
     @GetMapping("/category/search-range")
-    public String searchRange(@RequestParam("min") Integer min, @RequestParam("max") Integer max, Model model) {
-        List<Category> list = repoCategory.findByTotalBooksBetween(min, max);
-        model.addAttribute("listCategory", list);
-        if (list.isEmpty()) model.addAttribute("message", "Không có thể loại nào có số lượng sách này!");
+    public String searchRange(
+            @RequestParam("min") Integer min,
+            @RequestParam("max") Integer max,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        // Tính toán số trang (Trang 1 ở UI tương ứng với index 0 trong code)
+        int pageIndex = (page < 1) ? 0 : page - 1;
+
+        // Gọi repo với phân trang (ví dụ hiển thị 10 thể loại trên 1 trang)
+        Page<Category> pageData = repoCategory.findByTotalBooksBetween(min, max, PageRequest.of(pageIndex, 10));
+
+        // Đưa dữ liệu sang HTML để xử lý hiển thị và phân trang
+        model.addAttribute("pageData", pageData);
+        model.addAttribute("listCategory", pageData.getContent());
+
+        // Gửi lại min, max để các nút chuyển trang giữ được điều kiện lọc
+        model.addAttribute("minSearch", min);
+        model.addAttribute("maxSearch", max);
+
+        if (pageData.isEmpty()) {
+            model.addAttribute("message", "Không có thể loại nào có số lượng sách này!");
+        }
+
         return "Category/category_hien_thi";
     }
 }
