@@ -42,6 +42,7 @@ public class AuthorController {
 
         model.addAttribute("name23", null);
         model.addAttribute("listAuthor", repoAuthor.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("name23", null);
         return "Author/author_hien_thi";
     }
 

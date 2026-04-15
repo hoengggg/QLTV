@@ -28,7 +28,7 @@
             Previous
         </a>
 
-        <span>Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
+        <span th:if="${name23 == null}">Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]]</span>
 
         <a th:if="${pageData.hasNext()}"
             th:href="@{${name23 != null ? '/author/search' : '/author'}(page=${pageData.number + 2}, name=${name23})}">

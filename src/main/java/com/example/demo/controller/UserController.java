@@ -44,6 +44,7 @@ public class UserController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("name", null);
         model.addAttribute("listUser", repoUser.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("name23", null);
         return "User/user_hien_thi";
     }
 

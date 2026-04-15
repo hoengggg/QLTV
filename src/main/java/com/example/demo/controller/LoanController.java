@@ -53,6 +53,7 @@ public class LoanController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("status", null);
         model.addAttribute("listLoan", repoLoan.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("status23", null);
         return "Loan/loan_hien_thi";
     }
 

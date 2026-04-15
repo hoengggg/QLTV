@@ -43,6 +43,7 @@ public class ReservationController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("status", null);
         model.addAttribute("listReservation", repoReservation.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("status23", null);
         return "Reservation/reservation_hien_thi";
     }
 

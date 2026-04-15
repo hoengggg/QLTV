@@ -21,7 +21,7 @@
             Previous
         </a>
 
-        <span> Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]] </span>
+        <span th:if="${description23 == null}"> Trang: [[${pageData.number + 1}]] / [[${pageData.totalPages}]] </span>
 
         <a th:if="${pageData.hasNext()}"
            th:href="@{${description23 != null ? '/auditlog/search' : '/auditlog'}(page=${pageData.number + 2}, description=${description23})}">

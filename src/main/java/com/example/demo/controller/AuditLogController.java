@@ -41,6 +41,7 @@ public class AuditLogController {
 
         model.addAttribute("description", null); // Quan trọng: set null để phân biệt với search
         model.addAttribute("listAuditLog", repoAudit.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("description23", null);
         return "AuditLog/audit_log_hien_thi";
     }
 

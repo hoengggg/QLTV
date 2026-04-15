@@ -35,6 +35,7 @@ public class PublisherController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("name", null);
         model.addAttribute("listPublisher", repoPublisher.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("name23", null);
         return "Publisher/publisher_hien_thi";
     }
 

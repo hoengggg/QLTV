@@ -41,6 +41,7 @@ public class CategoryController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("name", null);
         model.addAttribute("listCategory", repoCategory.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("name23", null);
         return "Category/category_hien_thi";
     }
 

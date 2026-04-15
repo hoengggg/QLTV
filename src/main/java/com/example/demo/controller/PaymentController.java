@@ -39,6 +39,7 @@ public class PaymentController {
         model.addAttribute("pageData", pageData);
         model.addAttribute("method", null);
         model.addAttribute("listPayment", repoPayment.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("method23", null);
         return "Payment/payment_hien_thi";
     }
 

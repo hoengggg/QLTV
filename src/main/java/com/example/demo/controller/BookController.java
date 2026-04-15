@@ -40,6 +40,7 @@ public class BookController {
 
         model.addAttribute("title", null);
         model.addAttribute("listBook", repoBook.findAll(PageRequest.of(pageIndex, 10)));
+        model.addAttribute("title23", null);
         return "Book/book_hien_thi";
     }
 

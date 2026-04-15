@@ -262,6 +262,7 @@ INSERT INTO AuditLog(actorType, action, targetType, description) VALUES
 (1, 'EXPORT', 'REPORT', 'Librarian exported monthly report'), (1, 'SEARCH', 'AUTHOR', 'User searched for Knuth'),
 (1, 'LOGIN', 'ADMIN', 'Admin logged in'), (0, 'ERROR', 'PAYMENT', 'Payment gateway timeout');
 
+select * from [User]
 --sua lai status cua user tu nvarchar thanh bit
 -- 2. B?ng ph? thu?c c?p 1 (Con c?a các b?ng trên)
 INSERT INTO [User](name, email, status, membershipLevel, maxLoanLimit, currentLoanCount, overdueCount, reservationLimit, penaltyBalance, role_id, membership_id, username, password) VALUES 
